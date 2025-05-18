@@ -25,6 +25,11 @@ class MindMap {
         this.root.y0 = 0;
         this.selectedNode = null;
 
+        // Initialize Bootstrap modal
+        this.modal = new bootstrap.Modal(document.getElementById('nodeModal'), {
+            keyboard: true
+        });
+
         this.update();
     }
 
@@ -60,7 +65,7 @@ class MindMap {
 
         // Normalize for fixed depth
         nodes.forEach(d => {
-            d.y = d.depth * 110; // Slightly increased spacing
+            d.y = d.depth * 110;
         });
 
         // Links
@@ -96,7 +101,6 @@ class MindMap {
 
         nodeEnter.append("circle")
             .attr("r", d => {
-                // Calculate radius: base of 15 + 2 per character, with a minimum of 15 and max of 40
                 const textLength = d.data.name.length;
                 return Math.min(40, Math.max(15, 15 + textLength * 2));
             })
@@ -112,6 +116,9 @@ class MindMap {
             .on("click", (event, d) => {
                 this.selectedNode = d;
                 this.g.selectAll(".node").classed("node--selected", d2 => d2 === d);
+                // Show modal
+                d3.select('#nodeModalLabel').text(`Node: ${d.data.name}`);
+                this.modal.show();
             })
             .call(d3.drag()
                 .on("start", (event, d) => {
@@ -130,7 +137,6 @@ class MindMap {
             .style("text-anchor", "middle")
             .style("fill", "#333")
             .style("font-size", d => {
-                // Adjust font size based on text length to ensure fit
                 const textLength = d.data.name.length;
                 return textLength > 15 ? "9px" : "11px";
             })
