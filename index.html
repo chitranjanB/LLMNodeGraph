@@ -2,27 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="weight=device-width, initial-scale=1.0">
     <title>D3.js Radial Mind Map</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
+        body {
+            background: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+        svg {
+            background: linear-gradient(135deg, #ffffff, #e8ecef);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+        }
         .node circle {
-            fill: #fff;
-            stroke: #4682b4;
+            fill: #ffffff;
+            stroke: #007bff;
             stroke-width: 2px;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .node circle:hover {
+            fill: #e7f1ff;
+            stroke: #0056b3;
+            stroke-width: 3px;
         }
         .node text {
-            font: 12px sans-serif;
+            font: 11px 'Arial', sans-serif;
+            fill: #333;
             pointer-events: none;
+            text-anchor: middle;
+            dominant-baseline: central;
+            font-weight: 500;
         }
         .link {
             fill: none;
-            stroke: #ccc;
+            stroke: #adb5bd;
             stroke-width: 2px;
+            stroke-opacity: 0.7;
+            transition: stroke-opacity 0.2s ease;
         }
-        svg {
-            border: 1px solid #ddd;
+        .link:hover {
+            stroke-opacity: 1;
+        }
+        .node--selected circle {
+            stroke: #dc3545;
+            stroke-width: 3px;
         }
     </style>
 </head>
