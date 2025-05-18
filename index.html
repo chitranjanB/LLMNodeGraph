@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D3.js Radial Mind Map</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background: #f0f2f5;
@@ -15,7 +13,15 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: 'Arial', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
         }
         svg {
             background: linear-gradient(135deg, #ffffff, #e8ecef);
@@ -23,17 +29,24 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             overflow: visible;
         }
-        .node circle {
+        .node circle.main {
             fill: #ffffff;
             stroke: #007bff;
             stroke-width: 2px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .node circle:hover {
+        .node circle.main:hover {
             fill: #e7f1ff;
             stroke: #0056b3;
             stroke-width: 3px;
+        }
+        .node circle.progress-ring {
+            fill: none;
+            stroke: #28a745;
+            stroke-width: 2px;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease-in-out;
         }
         .node text {
             font: 11px 'Arial', sans-serif;
@@ -47,44 +60,97 @@
             fill: none;
             stroke: #adb5bd;
             stroke-width: 2px;
-            stroke-opacity: 0.7;
+            stroke-opacity: 0.3;
             transition: stroke-opacity 0.2s ease;
         }
         .link:hover {
             stroke-opacity: 1;
         }
-        .node--selected circle {
+        .node--selected circle.main {
             stroke: #dc3545;
             stroke-width: 3px;
         }
-        .modal-content {
-            border-radius: 10px;
+        .slide-panel {
+            position: fixed;
+            top: 0;
+            right: -400px; /* Hidden by default */
+            width: 400px;
+            height: 100%;
+            background: #181818;
+            color: #ffffff;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .slide-panel.open {
+            right: 0;
+        }
+        .slide-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #333;
+        }
+        .slide-panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .slide-panel-close {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .slide-panel-close:hover {
+            background: #333;
+        }
+        .slide-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-top: 16px;
+        }
+        .chat-message {
+            background: #282828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
-    <svg width="800" height="600"></svg>
+    <div class="container">
+        <svg width="800" height="600"></svg>
+    </div>
 
-    <!-- Bootstrap Modal -->
-    <div class="modal fade" id="nodeModal" tabindex="-1" aria-labelledby="nodeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="nodeModalLabel">Node Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+    <!-- Slide Panel -->
+    <div class="slide-panel" id="slidePanel">
+        <div class="slide-panel-header">
+            <h2 class="slide-panel-title" id="slidePanelTitle">Node Details</h2>
+            <button class="slide-panel-close" id="slidePanelClose">&times;</button>
+        </div>
+        <div class="slide-panel-body">
+            <div class="chat-message">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </div>
+            <div class="chat-message">
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="mindmap.js"></script>
     <script src="main.js"></script>
 </body>

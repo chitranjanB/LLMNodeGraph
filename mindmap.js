@@ -52,7 +52,9 @@ const MindMapModule = (function() {
                 .attr("class", "node")
                 .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
 
+            // Main circle
             nodeEnter.append("circle")
+                .attr("class", "main")
                 .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)))
                 .attr("filter", "url(#shadow)")
                 .on("mouseover", function(event, d) {
@@ -77,6 +79,23 @@ const MindMapModule = (function() {
                         eventEmitter.emit("update");
                     }));
 
+            // Progress ring
+            nodeEnter.append("circle")
+                .attr("class", "progress-ring")
+                .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 4)
+                .each(function(d) {
+                    d.progress = d.progress || Math.floor(Math.random() * 101);
+                    const circumference = 2 * Math.PI * (Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 4);
+                    const dashOffset = circumference * (1 - d.progress / 100);
+                    d3.select(this)
+                        .attr("stroke-dasharray", `${circumference} ${circumference}`)
+                        .attr("stroke-dashoffset", circumference)
+                        .transition()
+                        .duration(1000)
+                        .attr("stroke-dashoffset", dashOffset);
+                });
+
+            // Text
             nodeEnter.append("text")
                 .attr("dy", "0")
                 .attr("x", 0)
@@ -160,14 +179,18 @@ const MindMapModule = (function() {
                 });
             this.svg.call(this.zoom).call(this.zoom.transform, d3.zoomIdentity.translate(this.width / 2, this.height / 2).scale(1));
 
-            this.modal = new bootstrap.Modal(document.getElementById('nodeModal'), { keyboard: true });
+            this.slidePanel = d3.select("#slidePanel");
+            this.slidePanelClose = d3.select("#slidePanelClose");
+            this.slidePanelClose.on("click", () => {
+                this.slidePanel.classed("open", false);
+            });
 
             this.setupShadowFilter();
 
             this.eventEmitter.on("nodeClick", (d) => {
                 this.g.selectAll(".node").classed("node--selected", d2 => d2 === d);
-                d3.select('#nodeModalLabel').text(`Node: ${d.data.name}`);
-                this.modal.show();
+                d3.select("#slidePanelTitle").text(`Node: ${d.data.name}`);
+                this.slidePanel.classed("open", true);
             });
 
             this.eventEmitter.on("update", () => this.update());
