@@ -84,9 +84,9 @@ class MindMap {
             .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
 
         nodeEnter.append("circle")
-            .attr("r", 5)
-            .on("mouseover", function() { d3.select(this).attr("r", 7); })
-            .on("mouseout", function() { d3.select(this).attr("r", 5); })
+            .attr("r", 20) // Increased circle size
+            .on("mouseover", function() { d3.select(this).attr("r", 24); })
+            .on("mouseout", function() { d3.select(this).attr("r", 20); })
             .call(d3.drag()
                 .on("start", (event, d) => {
                     d.x0 = d.x;
@@ -99,10 +99,11 @@ class MindMap {
                 }));
 
         nodeEnter.append("text")
-            .attr("dy", ".31em")
-            .attr("x", d => d.x < Math.PI === !d.children ? 8 : -8)
-            .style("text-anchor", d => d.x < Math.PI === !d.children ? "start" : "end")
-            .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
+            .attr("dy", ".35em")
+            .attr("x", 0) // Center text horizontally
+            .style("text-anchor", "middle") // Center text alignment
+            .style("fill", "#000") // Ensure text is visible inside circle
+            .style("font-size", "10px") // Adjust font size to fit
             .text(d => d.data.name);
 
         node.merge(nodeEnter)
