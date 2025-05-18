@@ -3,50 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>D3.js Radial Mind Map</title>
+  <title>LLM NodeGraph</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     body {
       background: #f0f2f5;
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: 'Helvetica Neue', sans-serif;
       height: 100vh;
       overflow: hidden;
       display: grid;
       grid-template-columns: 1fr auto;
     }
+
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
     }
+
     svg {
       width: 100%;
       height: 100vh;
       background: linear-gradient(135deg, #ffffff, #e8ecef);
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
+
     .node circle.main {
       fill: #ffffff;
       stroke: #007bff;
       stroke-width: 2px;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
+
     .node circle.main:hover {
       fill: #e7f1ff;
       stroke: #0056b3;
       stroke-width: 3px;
     }
+
     .node circle.progress-ring {
       fill: none;
       stroke: #28a745;
       stroke-width: 2px;
       stroke-linecap: round;
-      transition: stroke-dashoffset 1s ease-in-out;
     }
+
     .node text {
       font: 11px 'Arial', sans-serif;
       fill: #333;
@@ -55,89 +57,141 @@
       dominant-baseline: central;
       font-weight: 600;
     }
+
     .link {
       fill: none;
       stroke: #adb5bd;
       stroke-width: 2px;
       stroke-opacity: 0.3;
-      transition: stroke-opacity 0.2s ease;
     }
+
     .link:hover {
       stroke-opacity: 1;
     }
+
     .node--selected circle.main {
       stroke: orange;
       stroke-width: 3px;
     }
+
     .slide-panel {
-      width: 400px;
+      width: 420px;
       height: 100vh;
-      background: #181818;
-      color: #ffffff;
-      box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
+      background: #343541;
+      color: #d1d5db;
       display: flex;
       flex-direction: column;
-      padding: 16px;
-      box-sizing: border-box;
-      transition: transform 0.3s ease-in-out;
+      box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
       transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+      overflow: hidden;
     }
+
     .slide-panel.open {
       transform: translateX(0);
     }
+
     .slide-panel-header {
+      background: #202123;
+      padding: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #4b4f56;
     }
+
     .slide-panel-title {
-      font-size: 18px;
-      font-weight: 600;
       margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
     }
+
     .slide-panel-close {
       background: none;
       border: none;
-      color: #ffffff;
+      color: #9ca3af;
       font-size: 24px;
       cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background 0.2s;
     }
+
     .slide-panel-close:hover {
-      background: #333;
+      color: #ffffff;
     }
+
     .slide-panel-body {
       flex: 1;
       overflow-y: auto;
-      padding-top: 16px;
+      padding: 16px;
+      background: #343541;
       display: flex;
       flex-direction: column;
-      gap: 12px;
     }
+
     .chat-message {
-      background: #282828;
-      padding: 12px;
+      background: #444654;
+      padding: 16px;
       border-radius: 8px;
+      margin-bottom: 12px;
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
+      color: #d1d5db;
     }
+
+    .chat-message.user {
+      background: #40414f;
+    }
+
+    .slide-panel-footer {
+      padding: 12px 16px;
+      border-top: 1px solid #4b4f56;
+      background: #343541;
+    }
+
+    .chat-input-container {
+      display: flex;
+      align-items: center;
+      background: #40414f;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-send-button {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .chat-send-button:hover {
+      color: #ffffff;
+    }
+
     @media (max-width: 768px) {
       body {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr auto;
       }
+
       .slide-panel {
         width: 100%;
-        height: 50vh;
+        height: 60vh;
         position: fixed;
         bottom: 0;
         right: 0;
         transform: translateY(100%);
       }
+
       .slide-panel.open {
         transform: translateY(0);
       }
@@ -153,16 +207,41 @@
       <h2 class="slide-panel-title" id="slidePanelTitle">Node Details</h2>
       <button class="slide-panel-close" id="slidePanelClose">&times;</button>
     </div>
-    <div class="slide-panel-body">
+    <div class="slide-panel-body" id="slidePanelBody">
       <div class="chat-message">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      </div>
-      <div class="chat-message">
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  <strong>React.js</strong> is a popular <em>JavaScript library</em> for building user interfaces, especially single-page applications. It allows developers to create large web applications that can update and render efficiently in response to data changes.<br><br>
+  <strong>Key Features:</strong>
+  <ul>
+    <li>Component-Based Architecture</li>
+    <li>Virtual DOM for Efficient Rendering</li>
+    <li>Declarative Syntax</li>
+    <li>Unidirectional Data Flow</li>
+    <li>Strong Ecosystem and Community</li>
+  </ul>
+  React was developed by Facebook and is maintained by Meta and the community. It's widely used for both web and mobile app development (via <code>React Native</code>).
+</div>
+
+      <!-- <div class="chat-message user">
+        Tell me more about this topic.
+      </div> -->
+    </div>
+    <div class="slide-panel-footer">
+      <div class="chat-input-container">
+        <input type="text" class="chat-input" placeholder="Send a message..." />
+        <button class="chat-send-button">&#9658;</button>
       </div>
     </div>
   </div>
 
+  <script>
+    document.getElementById('slidePanelClose').onclick = () => {
+      document.getElementById('slidePanel').classList.remove('open');
+    };
+
+    document.querySelector('svg').addEventListener('click', () => {
+      document.getElementById('slidePanel').classList.add('open');
+    });
+  </script>
   <script src="mindmap.js"></script>
   <script src="main.js"></script>
 </body>
