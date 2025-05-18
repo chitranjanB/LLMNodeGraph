@@ -2,7 +2,7 @@
 const mindMap = MindMapModule.MindMapFactory.createRadialMindMap({
     svgSelector: "svg",
     width: 800,
-    height: 600,
+    height: 400,
     styleConfig: {
         nodeFill: "#ffffff",
         nodeStroke: "#007bff"

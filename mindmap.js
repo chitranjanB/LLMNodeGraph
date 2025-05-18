@@ -189,7 +189,7 @@ const MindMapModule = (function() {
 
             this.eventEmitter.on("nodeClick", (d) => {
                 this.g.selectAll(".node").classed("node--selected", d2 => d2 === d);
-                d3.select("#slidePanelTitle").text(`Node: ${d.data.name}`);
+                d3.select("#slidePanelTitle").text(`Summary: ${d.data.name}`);
                 this.slidePanel.classed("open", true);
             });
 
