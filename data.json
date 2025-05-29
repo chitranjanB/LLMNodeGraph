@@ -1,0 +1,390 @@
+{
+  "name": "Root",
+  "children": [
+    {
+      "name": "Software Engineering",
+      "summary": {
+        "description": "<strong>Software Engineering</strong> involves the design, development, and maintenance of software systems using systematic methodologies.",
+        "details": [
+          "Agile Development",
+          "Software Lifecycle",
+          "Version Control",
+          "Testing and QA",
+          "Scalable Architectures"
+        ]
+      },
+      "children": [
+        {
+          "name": "ReactJs",
+          "summary": {
+            "description": "<strong>React.js</strong> is a popular <em>JavaScript library</em> for building user interfaces, especially single-page applications.",
+            "details": [
+              "Component-Based Architecture",
+              "Virtual DOM for Efficient Rendering",
+              "Declarative Syntax",
+              "Unidirectional Data Flow",
+              "Strong Ecosystem and Community"
+            ]
+          },
+          "children": [
+            {
+              "name": "JSX",
+              "summary": {
+                "description": "<strong>JSX</strong> is a syntax extension for JavaScript used with React to describe UI components.",
+                "details": [
+                  "XML-like Syntax",
+                  "Compiles to JavaScript",
+                  "Improves Readability",
+                  "Integrates with React Components"
+                ]
+              }
+            },
+            {
+              "name": "React Context",
+              "summary": {
+                "description": "<strong>React Context</strong> provides a way to pass data through the component tree without prop drilling.",
+                "details": [
+                  "Global State Management",
+                  "Avoids Prop Drilling",
+                  "Built-in React API",
+                  "Useful for Theming and Authentication"
+                ]
+              }
+            },
+            {
+              "name": "React Hooks",
+              "summary": {
+                "description": "<strong>React Hooks</strong> are functions that let developers use state and lifecycle features in functional components.",
+                "details": [
+                  "Introduced in React 16.8",
+                  "useState for State Management",
+                  "useEffect for Side Effects",
+                  "Custom Hooks for Reusability"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DevOps",
+          "summary": {
+            "description": "<strong>DevOps</strong> is a set of practices that combines software development and IT operations to improve collaboration and efficiency.",
+            "details": [
+              "Continuous Integration",
+              "Continuous Deployment",
+              "Infrastructure as Code",
+              "Monitoring and Logging",
+              "Collaboration Tools"
+            ]
+          },
+          "children": [
+            {
+              "name": "Docker",
+              "summary": {
+                "description": "<strong>Docker</strong> is a platform for developing, shipping, and running applications inside containers.",
+                "details": [
+                  "Containerization",
+                  "Lightweight and Portable",
+                  "Docker Hub for Images",
+                  "Scalable Deployments"
+                ]
+              }
+            },
+            {
+              "name": "CI/CD Pipelines",
+              "summary": {
+                "description": "<strong>CI/CD Pipelines</strong> automate the process of building, testing, and deploying code changes.",
+                "details": [
+                  "Jenkins and GitHub Actions",
+                  "Automated Testing",
+                  "Faster Release Cycles",
+                  "Improved Reliability"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Artificial Intelligence",
+      "summary": {
+        "description": "<strong>Artificial Intelligence</strong> refers to the development of computer systems that can perform tasks requiring human intelligence.",
+        "details": [
+          "Machine Learning",
+          "Natural Language Processing",
+          "Computer Vision",
+          "Robotics",
+          "Ethical AI Considerations"
+        ]
+      },
+      "children": [
+        {
+          "name": "Machine Learning",
+          "summary": {
+            "description": "<strong>Machine Learning</strong> is a subset of AI that enables systems to learn from data and improve over time.",
+            "details": [
+              "Supervised and Unsupervised Learning",
+              "Neural Networks",
+              "Model Training and Evaluation",
+              "Applications in Predictive Analytics"
+            ]
+          },
+          "children": [
+            {
+              "name": "Supervised Learning",
+              "summary": {
+                "description": "<strong>Supervised Learning</strong> uses labeled data to train models for prediction and classification tasks.",
+                "details": [
+                  "Regression and Classification",
+                  "Linear Models",
+                  "Decision Trees",
+                  "Evaluation Metrics like Accuracy"
+                ]
+              }
+            },
+            {
+              "name": "Unsupervised Learning",
+              "summary": {
+                "description": "<strong>Unsupervised Learning</strong> finds patterns in unlabeled data without predefined outputs.",
+                "details": [
+                  "Clustering Algorithms",
+                  "Dimensionality Reduction",
+                  "K-Means and PCA",
+                  "Anomaly Detection"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deep Learning",
+          "summary": {
+            "description": "<strong>Deep Learning</strong> uses neural networks with many layers to analyze complex patterns in data.",
+            "details": [
+              "Convolutional Neural Networks",
+              "Recurrent Neural Networks",
+              "Used in Image and Speech Recognition",
+              "Requires Large Datasets"
+            ]
+          },
+          "children": [
+            {
+              "name": "CNNs",
+              "summary": {
+                "description": "<strong>Convolutional Neural Networks</strong> are specialized for processing grid-like data, such as images.",
+                "details": [
+                  "Image Classification",
+                  "Feature Extraction",
+                  "Pooling Layers",
+                  "Applications in Computer Vision"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Environmental Science",
+      "summary": {
+        "description": "<strong>Environmental Science</strong> studies the interactions between the physical, chemical, and biological components of the environment.",
+        "details": [
+          "Ecosystem Dynamics",
+          "Climate Change",
+          "Conservation Biology",
+          "Renewable Energy",
+          "Pollution Control"
+        ]
+      },
+      "children": [
+        {
+          "name": "Climate Change",
+          "summary": {
+            "description": "<strong>Climate Change</strong> refers to long-term shifts in weather patterns due to human activities and natural processes.",
+            "details": [
+              "Greenhouse Gas Emissions",
+              "Global Warming",
+              "Sea Level Rise",
+              "Mitigation Strategies"
+            ]
+          },
+          "children": [
+            {
+              "name": "Carbon Footprint",
+              "summary": {
+                "description": "<strong>Carbon Footprint</strong> measures the total greenhouse gas emissions caused by an individual, organization, or product.",
+                "details": [
+                  "CO2 Equivalent",
+                  "Emission Sources",
+                  "Reduction Techniques",
+                  "Carbon Offsetting"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Renewable Energy",
+          "summary": {
+            "description": "<strong>Renewable Energy</strong> is derived from naturally replenishing resources such as sunlight, wind, and water.",
+            "details": [
+              "Solar Power",
+              "Wind Energy",
+              "Hydropower",
+              "Energy Storage Solutions"
+            ]
+          },
+          "children": [
+            {
+              "name": "Solar Power",
+              "summary": {
+                "description": "<strong>Solar Power</strong> harnesses energy from the sun using photovoltaic cells or solar thermal systems.",
+                "details": [
+                  "Photovoltaic Panels",
+                  "Solar Farms",
+                  "Energy Conversion Efficiency",
+                  "Grid Integration"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Economics",
+      "summary": {
+        "description": "<strong>Economics</strong> is the study of how societies allocate scarce resources to meet human needs and wants.",
+        "details": [
+          "Microeconomics",
+          "Macroeconomics",
+          "Market Structures",
+          "Fiscal and Monetary Policy",
+          "Behavioral Economics"
+        ]
+      },
+      "children": [
+        {
+          "name": "Microeconomics",
+          "summary": {
+            "description": "<strong>Microeconomics</strong> examines individual agents and markets, their interactions, and the outcomes of those interactions.",
+            "details": [
+              "Supply and Demand",
+              "Consumer Behavior",
+              "Production Costs",
+              "Market Equilibrium"
+            ]
+          },
+          "children": [
+            {
+              "name": "Game Theory",
+              "summary": {
+                "description": "<strong>Game Theory</strong> studies strategic decision-making among individuals or organizations.",
+                "details": [
+                  "Nash Equilibrium",
+                  "Prisoner’s Dilemma",
+                  "Strategic Interactions",
+                  "Applications in Business"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Behavioral Economics",
+          "summary": {
+            "description": "<strong>Behavioral Economics</strong> combines insights from psychology and economics to understand decision-making.",
+            "details": [
+              "Cognitive Biases",
+              "Nudge Theory",
+              "Bounded Rationality",
+              "Incentives and Choices"
+            ]
+          },
+          "children": [
+            {
+              "name": "Nudge Theory",
+              "summary": {
+                "description": "<strong>Nudge Theory</strong> suggests small changes in choice architecture can influence behavior predictably.",
+                "details": [
+                  "Choice Architecture",
+                  "Default Options",
+                  "Social Norms",
+                  "Policy Applications"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Biotechnology",
+      "summary": {
+        "description": "<strong>Biotechnology</strong> applies biological systems and organisms to develop products and technologies.",
+        "details": [
+          "Genetic Engineering",
+          "Pharmaceuticals",
+          "Agricultural Biotech",
+          "Bioinformatics",
+          "Ethical Considerations"
+        ]
+      },
+      "children": [
+        {
+          "name": "CRISPR",
+          "summary": {
+            "description": "<strong>CRISPR</strong> is a gene-editing technology that allows precise modifications to DNA.",
+            "details": [
+              "Cas9 Protein",
+              "Guide RNA",
+              "Gene Therapy Applications",
+              "Ethical Debates"
+            ]
+          },
+          "children": [
+            {
+              "name": "Gene Therapy",
+              "summary": {
+                "description": "<strong>Gene Therapy</strong> uses CRISPR to treat genetic disorders by correcting defective genes.",
+                "details": [
+                  "Somatic Cell Editing",
+                  "Inherited Diseases",
+                  "Clinical Trials",
+                  "Regulatory Challenges"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Synthetic Biology",
+          "summary": {
+            "description": "<strong>Synthetic Biology</strong> designs and constructs new biological parts, devices, and systems.",
+            "details": [
+              "Synthetic Genomes",
+              "Bioengineered Microorganisms",
+              "Applications in Medicine",
+              "Biosafety Concerns"
+            ]
+          },
+          "children": [
+            {
+              "name": "Biofuels",
+              "summary": {
+                "description": "<strong>Biofuels</strong> are fuels produced from biological materials, often using synthetic biology techniques.",
+                "details": [
+                  "Bioethanol",
+                  "Biodiesel",
+                  "Algae-Based Fuels",
+                  "Carbon-Neutral Potential"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
