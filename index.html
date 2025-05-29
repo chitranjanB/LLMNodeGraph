@@ -205,43 +205,17 @@
   <div class="slide-panel" id="slidePanel">
     <div class="slide-panel-header">
       <h2 class="slide-panel-title" id="slidePanelTitle">Node Details</h2>
-      <button class="slide-panel-close" id="slidePanelClose">&times;</button>
+      <button class="slide-panel-close" id="slidePanelClose">×</button>
     </div>
-    <div class="slide-panel-body" id="slidePanelBody">
-      <div class="chat-message">
-  <strong>React.js</strong> is a popular <em>JavaScript library</em> for building user interfaces, especially single-page applications. It allows developers to create large web applications that can update and render efficiently in response to data changes.<br><br>
-  <strong>Key Features:</strong>
-  <ul>
-    <li>Component-Based Architecture</li>
-    <li>Virtual DOM for Efficient Rendering</li>
-    <li>Declarative Syntax</li>
-    <li>Unidirectional Data Flow</li>
-    <li>Strong Ecosystem and Community</li>
-  </ul>
-  React was developed by Facebook and is maintained by Meta and the community. It's widely used for both web and mobile app development (via <code>React Native</code>).
-</div>
-
-      <!-- <div class="chat-message user">
-        Tell me more about this topic.
-      </div> -->
-    </div>
+    <div class="slide-panel-body" id="slidePanelBody"></div>
     <div class="slide-panel-footer">
       <div class="chat-input-container">
         <input type="text" class="chat-input" placeholder="Send a message..." />
-        <button class="chat-send-button">&#9658;</button>
+        <button class="chat-send-button">►</button>
       </div>
     </div>
   </div>
 
-  <script>
-    document.getElementById('slidePanelClose').onclick = () => {
-      document.getElementById('slidePanel').classList.remove('open');
-    };
-
-    document.querySelector('svg').addEventListener('click', () => {
-      document.getElementById('slidePanel').classList.add('open');
-    });
-  </script>
   <script src="mindmap.js"></script>
   <script src="main.js"></script>
 </body>

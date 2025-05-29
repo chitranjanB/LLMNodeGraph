@@ -52,7 +52,6 @@ const MindMapModule = (function() {
                 .attr("class", "node")
                 .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
 
-            // Main circle
             nodeEnter.append("circle")
                 .attr("class", "main")
                 .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)))
@@ -79,7 +78,6 @@ const MindMapModule = (function() {
                         eventEmitter.emit("update");
                     }));
 
-            // Progress ring
             nodeEnter.append("circle")
                 .attr("class", "progress-ring")
                 .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 4)
@@ -95,7 +93,6 @@ const MindMapModule = (function() {
                         .attr("stroke-dashoffset", dashOffset);
                 });
 
-            // Text
             nodeEnter.append("text")
                 .attr("dy", "0")
                 .attr("x", 0)
@@ -180,6 +177,7 @@ const MindMapModule = (function() {
             this.svg.call(this.zoom).call(this.zoom.transform, d3.zoomIdentity.translate(this.width / 2, this.height / 2).scale(1));
 
             this.slidePanel = d3.select("#slidePanel");
+            this.slidePanelBody = d3.select("#slidePanelBody");
             this.slidePanelClose = d3.select("#slidePanelClose");
             this.slidePanelClose.on("click", () => {
                 this.slidePanel.classed("open", false);
@@ -190,6 +188,7 @@ const MindMapModule = (function() {
             this.eventEmitter.on("nodeClick", (d) => {
                 this.g.selectAll(".node").classed("node--selected", d2 => d2 === d);
                 d3.select("#slidePanelTitle").text(`Summary: ${d.data.name}`);
+                this.updateSlidePanelContent(d.data);
                 this.slidePanel.classed("open", true);
             });
 
@@ -210,7 +209,7 @@ const MindMapModule = (function() {
                 .attr("flood-opacity", 0.3);
         }
 
-        addNode(parentName, newNodeName) {
+        addNode(parentName, newNode) {
             const findNode = (node, name) => {
                 if (node.name === name) return node;
                 if (node.children) {
@@ -225,7 +224,8 @@ const MindMapModule = (function() {
             const parent = findNode(this.data, parentName);
             if (parent) {
                 if (!parent.children) parent.children = [];
-                parent.children.push({ name: newNodeName });
+                const nodeData = typeof newNode === 'string' ? { name: newNode } : newNode;
+                parent.children.push(nodeData);
                 this.root = d3.hierarchy(this.data);
                 this.root.x0 = 0;
                 this.root.y0 = 0;
@@ -233,6 +233,28 @@ const MindMapModule = (function() {
             } else {
                 console.error(`Parent node "${parentName}" not found`);
             }
+        }
+
+        updateSlidePanelContent(nodeData) {
+            this.slidePanelBody.selectAll("*").remove();
+
+            const defaultContent = {
+                description: `Information about <strong>${nodeData.name}</strong>.`,
+                details: ["No additional details available."]
+            };
+
+            const content = nodeData.summary || defaultContent;
+
+            const chatMessage = this.slidePanelBody.append("div")
+                .attr("class", "chat-message");
+
+            chatMessage.append("div")
+                .html(content.description);
+
+            const ul = chatMessage.append("ul");
+            content.details.forEach(detail => {
+                ul.append("li").text(detail);
+            });
         }
 
         update() {
