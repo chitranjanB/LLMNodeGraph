@@ -42,11 +42,21 @@
       stroke-width: 3px;
     }
 
+    .node.active circle.main {
+      fill: #bbe7c4; /* Highlight active node */
+      stroke: #0056b3;
+      stroke-width: 3px;
+    }
+
     .node circle.progress-ring {
       fill: none;
-      /* stroke: #28a745; */
+      stroke: green;
       stroke-width: 2px;
       stroke-linecap: round;
+    }
+
+    .node.active circle.progress-ring {
+      stroke: #bbe7c4; /* Highlight progress ring */
     }
 
     .node text {
@@ -56,6 +66,10 @@
       text-anchor: middle;
       dominant-baseline: central;
       font-weight: 600;
+    }
+
+    .node.active text {
+      fill: #bdbdbd; /* Highlight text */
     }
 
     .link {
@@ -69,9 +83,10 @@
       stroke-opacity: 1;
     }
 
-    .node--selected circle.main {
-      stroke: lightgreen;
+    .link.active {
+      stroke: #9f9fa0; /* Highlight path */
       stroke-width: 3px;
+      stroke-opacity: 0.5;
     }
 
     .slide-panel {
@@ -93,7 +108,7 @@
 
     .slide-panel-header {
       background: #202123;
-      padding: 16px;
+      padding: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -177,6 +192,30 @@
       color: #ffffff;
     }
 
+    /* Breadcrumb styles */
+    .breadcrumb {
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #d1d5db;
+    }
+
+    .breadcrumb-item {
+      display: inline-block;
+      color: #60a5fa;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .breadcrumb-item:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb-item:not(:last-child)::after {
+      content: " > ";
+      color: #9ca3af;
+      margin: 0 5px;
+    }
+
     @media (max-width: 768px) {
       body {
         grid-template-columns: 1fr;
@@ -209,10 +248,10 @@
     </div>
     <div class="slide-panel-body" id="slidePanelBody"></div>
     <div class="slide-panel-footer">
-      <!-- <div class="chat-input-container">
+      <div class="chat-input-container">
         <input type="text" class="chat-input" placeholder="Send a message..." />
         <button class="chat-send-button">►</button>
-      </div> -->
+      </div>
     </div>
   </div>
 

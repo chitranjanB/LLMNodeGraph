@@ -186,9 +186,36 @@ const MindMapModule = (function() {
             this.setupShadowFilter();
 
             this.eventEmitter.on("nodeClick", (d) => {
-                this.g.selectAll(".node").classed("node--selected", d2 => d2 === d);
+                // Reset previous highlights
+                this.g.selectAll(".node").classed("active", false);
+                this.g.selectAll(".link").classed("active", false);
+
+                // Highlight the active node
+                this.g.selectAll(".node")
+                    .filter(d2 => d2 === d)
+                    .classed("active", true);
+
+                // Collect nodes in the path from root to active node
+                const pathNodes = [];
+                let current = d;
+                while (current) {
+                    pathNodes.push(current);
+                    current = current.parent;
+                }
+
+                // Highlight nodes along the path
+                this.g.selectAll(".node")
+                    .filter(d2 => pathNodes.includes(d2))
+                    .classed("active", true);
+
+                // Highlight links along the path
+                this.g.selectAll(".link")
+                    .filter(link => pathNodes.includes(link.target) && pathNodes.includes(link.source))
+                    .classed("active", true);
+
+                // Update slide panel with path nodes
                 d3.select("#slidePanelTitle").text(`Summary: ${d.data.name}`);
-                this.updateSlidePanelContent(d.data);
+                this.updateSlidePanelContent(d.data, pathNodes);
                 this.slidePanel.classed("open", true);
             });
 
@@ -235,9 +262,30 @@ const MindMapModule = (function() {
             }
         }
 
-        updateSlidePanelContent(nodeData) {
+        updateSlidePanelContent(nodeData, pathNodes) {
             this.slidePanelBody.selectAll("*").remove();
 
+            // Add breadcrumb
+            const breadcrumb = this.slidePanelBody.append("div")
+                .attr("class", "breadcrumb");
+
+            // Reverse pathNodes to display from root to active node
+            pathNodes.reverse().forEach((node, index) => {
+                const item = breadcrumb.append("span")
+                    .attr("class", "breadcrumb-item")
+                    .text(node.data.name)
+                    .on("click", () => {
+                        // Trigger nodeClick event for the clicked breadcrumb node
+                        this.eventEmitter.emit("nodeClick", node);
+                    });
+
+                // Truncate long names for display
+                if (node.data.name.length > 20) {
+                    item.text(node.data.name.substring(0, 17) + "...");
+                }
+            });
+
+            // Add node content
             const defaultContent = {
                 description: `Information about <strong>${nodeData.name}</strong>.`,
                 details: ["No additional details available."]
