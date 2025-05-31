@@ -79,11 +79,15 @@ const MindMapModule = (function() {
                     }));
 
             nodeEnter.append("circle")
+                .attr("class", "progress-bg")
+                .attr("r", d => Math.min(52, Math.max(15, 15 + d.data.name.length * 2)) + 6);
+
+            nodeEnter.append("circle")
                 .attr("class", "progress-ring")
-                .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 4)
+                .attr("r", d => Math.min(52, Math.max(15, 15 + d.data.name.length * 2)) + 6)
                 .each(function(d) {
                     d.progress = d.progress || Math.floor(Math.random() * 101);
-                    const circumference = 2 * Math.PI * (Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 4);
+                    const circumference = 2 * Math.PI * (Math.min(52, Math.max(15, 15 + d.data.name.length * 2)) + 6);
                     const dashOffset = circumference * (1 - d.progress / 100);
                     d3.select(this)
                         .attr("stroke-dasharray", `${circumference} ${circumference}`)
@@ -94,6 +98,7 @@ const MindMapModule = (function() {
                 });
 
             nodeEnter.append("text")
+                .attr("class", "node-label")
                 .attr("dy", "0")
                 .attr("x", 0)
                 .style("text-anchor", "middle")
@@ -186,16 +191,13 @@ const MindMapModule = (function() {
             this.setupShadowFilter();
 
             this.eventEmitter.on("nodeClick", (d) => {
-                // Reset previous highlights
                 this.g.selectAll(".node").classed("active", false);
                 this.g.selectAll(".link").classed("active", false);
 
-                // Highlight the active node
                 this.g.selectAll(".node")
                     .filter(d2 => d2 === d)
                     .classed("active", true);
 
-                // Collect nodes in the path from root to active node
                 const pathNodes = [];
                 let current = d;
                 while (current) {
@@ -203,17 +205,14 @@ const MindMapModule = (function() {
                     current = current.parent;
                 }
 
-                // Highlight nodes along the path
                 this.g.selectAll(".node")
                     .filter(d2 => pathNodes.includes(d2))
                     .classed("active", true);
 
-                // Highlight links along the path
                 this.g.selectAll(".link")
                     .filter(link => pathNodes.includes(link.target) && pathNodes.includes(link.source))
                     .classed("active", true);
 
-                // Update slide panel with path nodes
                 d3.select("#slidePanelTitle").text(`Summary: ${d.data.name}`);
                 this.updateSlidePanelContent(d.data, pathNodes);
                 this.slidePanel.classed("open", true);
@@ -265,27 +264,22 @@ const MindMapModule = (function() {
         updateSlidePanelContent(nodeData, pathNodes) {
             this.slidePanelBody.selectAll("*").remove();
 
-            // Add breadcrumb
             const breadcrumb = this.slidePanelBody.append("div")
                 .attr("class", "breadcrumb");
 
-            // Reverse pathNodes to display from root to active node
             pathNodes.reverse().forEach((node, index) => {
                 const item = breadcrumb.append("span")
                     .attr("class", "breadcrumb-item")
                     .text(node.data.name)
                     .on("click", () => {
-                        // Trigger nodeClick event for the clicked breadcrumb node
                         this.eventEmitter.emit("nodeClick", node);
                     });
 
-                // Truncate long names for display
                 if (node.data.name.length > 20) {
                     item.text(node.data.name.substring(0, 17) + "...");
                 }
             });
 
-            // Add node content
             const defaultContent = {
                 description: `Information about <strong>${nodeData.name}</strong>.`,
                 details: ["No additional details available."]

@@ -43,20 +43,29 @@
     }
 
     .node.active circle.main {
-      fill: #bbe7c4; /* Highlight active node */
+      fill: #bbe7c4;
       stroke: #0056b3;
       stroke-width: 3px;
     }
 
     .node circle.progress-ring {
       fill: none;
-      stroke: green;
-      stroke-width: 2px;
+      stroke: #28a745;
+      stroke-width: 4px;
       stroke-linecap: round;
+      stroke-opacity: 0.7;
     }
 
     .node.active circle.progress-ring {
-      stroke: #bbe7c4; /* Highlight progress ring */
+      stroke: #bbe7c4;
+      stroke-opacity: 1;
+    }
+
+    .node circle.progress-bg {
+      fill: none;
+      stroke: #e0e0e0;
+      stroke-width: 4px;
+      stroke-opacity: 0.3;
     }
 
     .node text {
@@ -69,7 +78,7 @@
     }
 
     .node.active text {
-      fill: #bdbdbd; /* Highlight text */
+      fill: #bdbdbd;
     }
 
     .link {
@@ -84,7 +93,7 @@
     }
 
     .link.active {
-      stroke: #9f9fa0; /* Highlight path */
+      stroke: #9f9fa0;
       stroke-width: 3px;
       stroke-opacity: 0.5;
     }
@@ -192,7 +201,6 @@
       color: #ffffff;
     }
 
-    /* Breadcrumb styles */
     .breadcrumb {
       margin-bottom: 16px;
       font-size: 14px;
