@@ -59,10 +59,12 @@ const MindMapModule = (function() {
                 .on("mouseover", function(event, d) {
                     const baseRadius = Math.min(52, Math.max(15, 15 + d.data.name.length * 2));
                     d3.select(this).transition().duration(200).attr("r", baseRadius + 5);
+                    d3.select(this.parentNode).select(".progress-ring").transition().duration(200).attr("stroke", "#34d399");
                 })
                 .on("mouseout", function(event, d) {
                     const baseRadius = Math.min(52, Math.max(15, 15 + d.data.name.length * 2));
                     d3.select(this).transition().duration(200).attr("r", baseRadius);
+                    d3.select(this.parentNode).select(".progress-ring").transition().duration(200).attr("stroke", "#10b981");
                 })
                 .on("click", (event, d) => {
                     eventEmitter.emit("nodeClick", d);

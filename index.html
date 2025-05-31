@@ -31,39 +31,44 @@
 
     .node circle.main {
       fill: #ffffff;
-      stroke: #007bff;
+      stroke: #2563eb;
       stroke-width: 2px;
       cursor: pointer;
     }
 
     .node circle.main:hover {
-      fill: #e7f1ff;
-      stroke: #0056b3;
+      fill: #dbeafe;
+      stroke: #1e40af;
       stroke-width: 3px;
     }
 
     .node.active circle.main {
-      fill: #bbe7c4;
-      stroke: #0056b3;
+      fill: #6ee7b7;
+      stroke: #2563eb;
       stroke-width: 3px;
     }
 
     .node circle.progress-ring {
       fill: none;
-      stroke: #28a745;
+      stroke: #10b981;
       stroke-width: 4px;
       stroke-linecap: round;
       stroke-opacity: 0.7;
     }
 
+    .node circle.progress-ring:hover {
+      stroke: #34d399;
+      stroke-opacity: 0.9;
+    }
+
     .node.active circle.progress-ring {
-      stroke: #bbe7c4;
+      stroke: #6ee7b7;
       stroke-opacity: 1;
     }
 
     .node circle.progress-bg {
       fill: none;
-      stroke: #e0e0e0;
+      stroke: #e5e7eb;
       stroke-width: 4px;
       stroke-opacity: 0.3;
     }
@@ -78,30 +83,30 @@
     }
 
     .node.active text {
-      fill: #bdbdbd;
+      fill: #4b5563;
     }
 
     .link {
       fill: none;
-      stroke: #adb5bd;
+      stroke: #bec3cf;
       stroke-width: 2px;
       stroke-opacity: 0.3;
     }
 
     .link:hover {
-      stroke-opacity: 1;
+      stroke-opacity: 0.6;
     }
 
     .link.active {
-      stroke: #9f9fa0;
+      stroke: #4b5563;
       stroke-width: 3px;
-      stroke-opacity: 0.5;
+      stroke-opacity: 0.7;
     }
 
     .slide-panel {
       width: 420px;
       height: 100vh;
-      background: #343541;
+      background: #1f2937;
       color: #d1d5db;
       display: flex;
       flex-direction: column;
@@ -116,12 +121,12 @@
     }
 
     .slide-panel-header {
-      background: #202123;
+      background: #111827;
       padding: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #4b4f56;
+      border-bottom: 1px solid #4b5563;
     }
 
     .slide-panel-title {
@@ -147,13 +152,13 @@
       flex: 1;
       overflow-y: auto;
       padding: 16px;
-      background: #343541;
+      background: #1f2937;
       display: flex;
       flex-direction: column;
     }
 
     .chat-message {
-      background: #444654;
+      background: #374151;
       padding: 16px;
       border-radius: 8px;
       margin-bottom: 12px;
@@ -163,19 +168,19 @@
     }
 
     .chat-message.user {
-      background: #40414f;
+      background: #4b5563;
     }
 
     .slide-panel-footer {
       padding: 12px 16px;
-      border-top: 1px solid #4b4f56;
-      background: #343541;
+      border-top: 1px solid #4b5563;
+      background: #1f2937;
     }
 
     .chat-input-container {
       display: flex;
       align-items: center;
-      background: #40414f;
+      background: #374151;
       border-radius: 8px;
       padding: 10px 12px;
     }
@@ -209,7 +214,7 @@
 
     .breadcrumb-item {
       display: inline-block;
-      color: #60a5fa;
+      color: #2563eb;
       cursor: pointer;
       text-decoration: none;
     }
