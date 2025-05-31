@@ -54,20 +54,23 @@ const MindMapModule = (function() {
 
             nodeEnter.append("circle")
                 .attr("class", "main")
-                .attr("r", d => Math.min(52, Math.max(15, 15 + d.data.name.length * 2)))
+                .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)))
                 .attr("filter", "url(#shadow)")
                 .on("mouseover", function(event, d) {
-                    const baseRadius = Math.min(52, Math.max(15, 15 + d.data.name.length * 2));
+                    const baseRadius = Math.min(40, Math.max(15, 15 + d.data.name.length * 2));
                     d3.select(this).transition().duration(200).attr("r", baseRadius + 5);
                     d3.select(this.parentNode).select(".progress-ring").transition().duration(200).attr("stroke", "#34d399");
                 })
                 .on("mouseout", function(event, d) {
-                    const baseRadius = Math.min(52, Math.max(15, 15 + d.data.name.length * 2));
+                    const baseRadius = Math.min(40, Math.max(15, 15 + d.data.name.length * 2));
                     d3.select(this).transition().duration(200).attr("r", baseRadius);
                     d3.select(this.parentNode).select(".progress-ring").transition().duration(200).attr("stroke", "#10b981");
                 })
                 .on("click", (event, d) => {
                     eventEmitter.emit("nodeClick", d);
+                })
+                .on("dblclick", (event, d) => {
+                    eventEmitter.emit("nodeDoubleClick", d);
                 })
                 .call(d3.drag()
                     .on("start", (event, d) => {
@@ -82,14 +85,14 @@ const MindMapModule = (function() {
 
             nodeEnter.append("circle")
                 .attr("class", "progress-bg")
-                .attr("r", d => Math.min(52, Math.max(15, 15 + d.data.name.length * 2)) + 6);
+                .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 6);
 
             nodeEnter.append("circle")
                 .attr("class", "progress-ring")
-                .attr("r", d => Math.min(52, Math.max(15, 15 + d.data.name.length * 2)) + 6)
+                .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 6)
                 .each(function(d) {
                     d.progress = d.progress || Math.floor(Math.random() * 101);
-                    const circumference = 2 * Math.PI * (Math.min(52, Math.max(15, 15 + d.data.name.length * 2)) + 6);
+                    const circumference = 2 * Math.PI * (Math.min(40, Math.max(15, 15 + d.data.name.length * 2)) + 6);
                     const dashOffset = circumference * (1 - d.progress / 100);
                     d3.select(this)
                         .attr("stroke-dasharray", `${circumference} ${circumference}`)
@@ -174,14 +177,17 @@ const MindMapModule = (function() {
             this.root = d3.hierarchy(this.data);
             this.root.x0 = 0;
             this.root.y0 = 0;
+            this.viewHistory = [];
+            this.currentTransform = d3.zoomIdentity.translate(this.width / 2, this.height / 2).scale(1);
 
             this.zoom = d3.zoom()
                 .scaleExtent([0.3, 3])
                 .on("zoom", (event) => {
+                    this.currentTransform = event.transform;
                     this.g.attr("transform", event.transform.translate(this.width / 2, this.height / 2));
                     this.eventEmitter.emit("zoom", event.transform);
                 });
-            this.svg.call(this.zoom).call(this.zoom.transform, d3.zoomIdentity.translate(this.width / 2, this.height / 2).scale(1));
+            this.svg.call(this.zoom).call(this.zoom.transform, this.currentTransform);
 
             this.slidePanel = d3.select("#slidePanel");
             this.slidePanelBody = d3.select("#slidePanelBody");
@@ -190,7 +196,13 @@ const MindMapModule = (function() {
                 this.slidePanel.classed("open", false);
             });
 
+            this.backButton = d3.select("#slidePanelBack");
+            this.backButton.on("click", () => {
+                this.goBack();
+            });
+
             this.setupShadowFilter();
+            this.updateBackButtonState();
 
             this.eventEmitter.on("nodeClick", (d) => {
                 this.g.selectAll(".node").classed("active", false);
@@ -218,6 +230,10 @@ const MindMapModule = (function() {
                 d3.select("#slidePanelTitle").text(`Summary: ${d.data.name}`);
                 this.updateSlidePanelContent(d.data, pathNodes);
                 this.slidePanel.classed("open", true);
+            });
+
+            this.eventEmitter.on("nodeDoubleClick", (d) => {
+                this.setNewRoot(d);
             });
 
             this.eventEmitter.on("update", () => this.update());
@@ -263,9 +279,58 @@ const MindMapModule = (function() {
             }
         }
 
+        setNewRoot(node) {
+            // Save current view state
+            this.viewHistory.push({
+                data: JSON.parse(JSON.stringify(this.data)),
+                transform: this.currentTransform
+            });
+
+            // Create new data structure with the clicked node as root
+            this.data = {
+                name: node.data.name,
+                children: node.data.children ? JSON.parse(JSON.stringify(node.data.children)) : [],
+                progress: node.data.progress,
+                summary: node.data.summary
+            };
+            this.root = d3.hierarchy(this.data);
+            this.root.x0 = 0;
+            this.root.y0 = 0;
+
+            // Reset transform
+            this.currentTransform = d3.zoomIdentity.translate(this.width / 2, this.height / 2).scale(1);
+            this.svg.call(this.zoom.transform, this.currentTransform);
+            this.g.attr("transform", this.currentTransform);
+
+            this.updateBackButtonState();
+            this.eventEmitter.emit("update");
+        }
+
+        goBack() {
+            if (this.viewHistory.length === 0) return;
+
+            // Restore previous view state
+            const previousState = this.viewHistory.pop();
+            this.data = previousState.data;
+            this.root = d3.hierarchy(this.data);
+            this.root.x0 = 0;
+            this.root.y0 = 0;
+            this.currentTransform = previousState.transform;
+            this.svg.call(this.zoom.transform, this.currentTransform);
+            this.g.attr("transform", this.currentTransform);
+
+            this.updateBackButtonState();
+            this.eventEmitter.emit("update");
+        }
+
+        updateBackButtonState() {
+            this.backButton.attr("disabled", this.viewHistory.length === 0 ? true : null);
+        }
+
         updateSlidePanelContent(nodeData, pathNodes) {
             this.slidePanelBody.selectAll("*").remove();
 
+            // Add breadcrumb
             const breadcrumb = this.slidePanelBody.append("div")
                 .attr("class", "breadcrumb");
 
@@ -282,21 +347,20 @@ const MindMapModule = (function() {
                 }
             });
 
-            const defaultContent = {
+            // Add node content
+            const content = nodeData.summary || {
                 description: `Information about <strong>${nodeData.name}</strong>.`,
                 details: ["No additional details available."]
             };
-
-            const content = nodeData.summary || defaultContent;
 
             const chatMessage = this.slidePanelBody.append("div")
                 .attr("class", "chat-message");
 
             chatMessage.append("div")
-                .html(content.description);
+                .html(content.description || `Information about <strong>${nodeData.name}</strong>.`);
 
             const ul = chatMessage.append("ul");
-            content.details.forEach(detail => {
+            (content.details || ["No additional details available."]).forEach(detail => {
                 ul.append("li").text(detail);
             });
         }
