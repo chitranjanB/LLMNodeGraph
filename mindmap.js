@@ -54,14 +54,14 @@ const MindMapModule = (function() {
 
             nodeEnter.append("circle")
                 .attr("class", "main")
-                .attr("r", d => Math.min(40, Math.max(15, 15 + d.data.name.length * 2)))
+                .attr("r", d => Math.min(52, Math.max(15, 15 + d.data.name.length * 2)))
                 .attr("filter", "url(#shadow)")
                 .on("mouseover", function(event, d) {
-                    const baseRadius = Math.min(40, Math.max(15, 15 + d.data.name.length * 2));
+                    const baseRadius = Math.min(52, Math.max(15, 15 + d.data.name.length * 2));
                     d3.select(this).transition().duration(200).attr("r", baseRadius + 5);
                 })
                 .on("mouseout", function(event, d) {
-                    const baseRadius = Math.min(40, Math.max(15, 15 + d.data.name.length * 2));
+                    const baseRadius = Math.min(52, Math.max(15, 15 + d.data.name.length * 2));
                     d3.select(this).transition().duration(200).attr("r", baseRadius);
                 })
                 .on("click", (event, d) => {
